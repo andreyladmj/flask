@@ -1,0 +1,18 @@
+{% extends 'layout.html' %}
+{% block body %}
+
+    <div id="callout-list" class="starter-template face-net bs-docs-container">
+        <callout v-for="callout in callouts" :key="callout.title" :callout="callout"></callout>
+    </div>
+
+    <template id="callout-template">
+        <div class="bs-callout bs-lfw" v-bind:class="[ success ? 'bs-callout-success' : 'bs-callout-danger' ]">
+            <h4>{(callout.title)}</h4>
+            <div class="info" v-html="info">{(info)}</div>
+            <div v-if="showLogs" class="logs well" v-html="logs">{(logs)}</div>
+            <button v-on:click="update" class="btn btn-info">Update</button>
+            <img v-if="loading" class="preloader" src="/static/img/preloader.gif" width="35">
+        </div>
+    </template>
+
+{% endblock body %}

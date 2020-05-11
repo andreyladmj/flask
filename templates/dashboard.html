@@ -1,0 +1,15 @@
+{% extends 'layout.html' %}
+{% block body %}
+<div class="starter-template receipts">
+    <h1>Receipts</h1>
+    {% for recipe in recipes.items %}
+        <div class="receipt">
+            <h2><a href="/receipt/{{recipe.id}}">{{recipe.name}}</a></h2>
+            <p>{{recipe.description}}</p>
+            <p>Author: <a href="/user/{{recipe.user.id}}">{{recipe.user.first_name}} {{recipe.user.last_name}}</a></p>
+        </div>
+    {% endfor %}
+    {% if recipes.has_prev %}<a href="{{ url_for('dashboard', page=recipes.prev_num) }}">&lt;&lt; Newer recipes</a>{% else %}&lt;&lt; Newer recipes{% endif %} |
+    {% if recipes.has_next %}<a href="{{ url_for('dashboard', page=recipes.next_num) }}">Older recipes &gt;&gt;</a>{% else %}Older recipes &gt;&gt;{% endif %}
+</div>
+{% endblock body %}

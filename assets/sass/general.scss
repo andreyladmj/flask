@@ -1,0 +1,46 @@
+.receipts {
+    margin-bottom: 50px;
+}
+
+.receipt {
+    margin-bottom: 20px;
+    border-bottom: 1px solid #ddd;
+}
+
+.bs-docs-container {
+    .bs-callout {
+        padding: 20px;
+        margin: 20px 0;
+        border: 1px solid #eee;
+        border-left-width: 5px;
+        border-radius: 3px;
+    }
+    .bs-callout-danger {
+        border-left-color: #ce4844;
+        h4 {
+            color: #ce4844;
+        }
+    }
+    .bs-callout-warning {
+        border-left-color: #aa6708;
+        h4 {
+            color: #aa6708;
+        }
+    }
+    .bs-callout-success {
+        border-left-color: #5cb85c;
+        h4 {
+            color: #5cb85c;
+        }
+    }
+    .bs-callout-info {
+        border-left-color: #1b809e;
+        h4 {
+            color: #1b809e;
+        }
+    }
+
+    .logs {
+        margin-top: 20px;
+    }
+}

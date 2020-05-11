@@ -1,0 +1,142 @@
+version: '2'
+
+services:
+
+  vendors:
+      image: fix_python2 #fix_python # - for cmake (dlib) and mysql
+      working_dir: /mnt
+      volumes:
+        - ./:/mnt
+      environment:
+        PYTHONUSERBASE: /mnt/vendor
+      command: pip install -r requirements.txt --user --upgrade
+      #docker-compose run --rm vendors
+
+  server:
+      image: fix_python2
+      working_dir: /mnt
+      volumes:
+        - ./:/mnt
+      ports:
+        - 8000
+      links:
+        - mysql
+        - redis
+        - s3
+      environment:
+        PYTHONPATH: src
+        PYTHONUSERBASE: /mnt/vendor
+      networks:
+      #  - flask-app-network
+        flask-app-network:
+          ipv4_address: 172.96.50.15 # for static ip
+
+      restart: always
+      #command: /mnt/run_app.sh # don't forget set permission
+      command: python app.py
+      #docker-compose up server
+
+  mysql:
+      image: mysql
+      ports:
+        - 3306
+      environment:
+        #MYSQL_ROOT_PASSWORD: root
+        MYSQL_DATABASE: flask
+        MYSQL_USER: root
+        MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
+      networks:
+        flask-app-network:
+          ipv4_address: 172.96.50.2
+      #volumes:
+      #  - /var/lib/mysql:/var/lib/mysql #store to local db
+
+  redis:
+      image: 'bitnami/redis:latest'
+      environment:
+        - ALLOW_EMPTY_PASSWORD=yes
+      ports:
+        - 6379
+      networks:
+        flask-app-network:
+          ipv4_address: 172.96.50.3
+
+  loadbalancer:
+      image: 'dockercloud/haproxy:latest'
+      links:
+        - server
+      volumes:
+        - /var/run/docker.sock:/var/run/docker.sock
+      ports:
+        - 8000:80
+      networks:
+        flask-app-network:
+          ipv4_address: 172.96.50.10
+      # docker-compose up -d
+      # docker-compose scale server=5
+      # docker-compose stop loadbalancer
+      # docker-compose rm loadbalancer
+      # docker-compose up -d --no-deps loadbalancer
+
+  mysql-master:
+      image: 'bitnami/mysql:latest'
+      ports:
+        - 3306
+      volumes:
+        - /path/to/mysql-persistence:/bitnami
+      environment:
+        - MYSQL_REPLICATION_MODE=master
+        - MYSQL_REPLICATION_USER=repl_user
+        - MYSQL_REPLICATION_PASSWORD=repl_password
+        - MYSQL_ROOT_PASSWORD=master_root_password
+        - MYSQL_USER=my_user
+        - MYSQL_PASSWORD=my_password
+        - MYSQL_DATABASE=my_database
+
+  mysql-slave:
+      image: 'bitnami/mysql:latest'
+      ports:
+        - 3306
+      depends_on:
+        - mysql-master
+      networks:
+        - flask-app-network
+      environment:
+        - MYSQL_REPLICATION_MODE=slave
+        - MYSQL_REPLICATION_USER=repl_user
+        - MYSQL_REPLICATION_PASSWORD=repl_password
+        - MYSQL_MASTER_HOST=mysql-master
+        - MYSQL_MASTER_PORT_NUMBER=3306
+        - MYSQL_MASTER_ROOT_PASSWORD=master_root_password
+
+  aws:
+    image: garland/aws-cli-docker
+    entrypoint: aws
+    environment:
+      AWS_ACCESS_KEY_ID: 123
+      AWS_SECRET_ACCESS_KEY: qwe
+      AWS_DEFAULT_REGION: us-east-1
+
+  s3:
+    image: picadoh/motocker
+    environment:
+      - MOTO_SERVICE=s3
+      - MOTO_HOST=172.18.0.2
+    ports:
+      - "5000:5000"
+    #networks:
+    #  motonet:
+    #    ipv4_address: 10.0.1.0
+
+networks:
+  flask-app-network:
+    ipam:
+      driver: default
+      config:
+      - subnet: 172.96.50.0/24
+
+  motonet:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 10.0.0.0/16

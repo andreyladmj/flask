@@ -1,0 +1,24 @@
+{% extends 'layout.html' %}
+{% block body %}
+<div class="starter-template login">
+    <form method="post">
+        <div class="form-group">
+            <label for="email">Email address</label>
+            <input type="email" class="form-control" name="email" id="name" placeholder="Email" value="">
+        </div>
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" class="form-control" name="password" id="password" placeholder="Password">
+        </div>
+        <button type="submit" class="btn btn-default">Submit</button>
+
+        <div class="form-group" style="margin-top: 50px">
+            <label for="profile_image">Add Profile Image</label>
+            <div id="my_camera"></div>
+            <input type="button" value="Login" id="take_snapshot">
+            <input type="hidden" id="face_photo" name="face_photo">
+            <p class="help-block">Login By Face</p>
+        </div>
+    </form>
+</div>
+{% endblock body %}

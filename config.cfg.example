@@ -1,0 +1,15 @@
+SQLALCHEMY_DATABASE_URI='mysql://username:password@localhost/databasename'
+SQLALCHEMY_TRACK_MODIFICATIONS=True
+REDIS_IP='172.96.50.3'
+S3_HOST='http://172.18.0.2:5000'
+S3_AWS_ACCESS_KEY_ID='test'
+S3_AWS_SECRET_ACCESS_KEY='test'
+S3_REGION_NAME='us-east-1'
+S3_USE_SSL=False
+FACE_NET_LWF_URL='http://vis-www.cs.umass.edu/lfw/lfw.tgz'
+FACE_NET_LANDMARKS_URL='http://dlib.net/files/shape_predictor_68_face_landmarks.dat.bz2'
+FACE_NET_LANDMARKS_FILE='acme/Networks/FaceNet/shape_predictor_68_face_landmarks.dat'
+FACE_NET_WEIGHTS_DIR='acme/Networks/FaceNet/weights'
+FACE_NET_WEIGHTS_FILE='acme/Networks/FaceNet/weights/20170511-185253/20170511-185253.pb'
+FACE_NET_OUTPUT_DIR='acme/Networks/FaceNet/output'
+FACE_NET_DATA_DIR='acme/Networks/FaceNet/data'

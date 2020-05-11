@@ -1,0 +1,11 @@
+{% extends 'layout.html' %}
+{% block body %}
+<div class="starter-template">
+    <a href="/" class="btn btn-default">< Back</a>
+    <h1>{{receipt.name}}</h1>
+    <div class="receipt">
+        <p>{{receipt.description}}</p>
+        <p>Author: <a href="/user/{{receipt.user.id}}">{{receipt.user.first_name}} {{receipt.user.last_name}}</a></p>
+    </div>
+</div>
+{% endblock body %}

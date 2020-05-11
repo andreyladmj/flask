@@ -1,0 +1,8 @@
+tqdm
+regex
+flask_socketio
+eventlet
+gevent
+opencv-python
+tensorflow-gpu>=1.4.0
+colorama
